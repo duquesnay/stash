@@ -99,7 +99,7 @@ class StaSh(object):
 
     def __init__(self, debug=(), log_setting=None,
                  no_cfgfile=False, no_rcfile=False, no_historyfile=False,
-                 command=None):
+                 command=None, cwd=None):
         self.__version__ = __version__
 
         # Intercept IO
@@ -141,7 +141,9 @@ class StaSh(object):
 
         # Navigate to the startup folder
         if IN_PYTHONISTA:
-            os.chdir(self.runtime.state.environ_get('HOME2'))
+            if not cwd:
+                cwd = self.runtime.state.environ_get('HOME2')
+            os.chdir(cwd)
         self.runtime.load_rcfile(no_rcfile=no_rcfile)
         self.io.write(
         	self.text_style(
